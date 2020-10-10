@@ -2,7 +2,7 @@ import tensorflow as tf
 
 class BaseGAttN:
     def loss(logits, labels, nb_classes, class_weights):
-        sample_wts = tf.reduce_sum(tf.multiply(tf.one_hot(labels, nb_classes), class_weights), axis=-1)
+        sample_wts = tf.reduce_sum(tf.multiply(tf.one_hot(labels, nb_classes), class_weights), axis=-1)  ## 得到每一个标签对应一个attention值，最终得到一个向量
         xentropy = tf.multiply(tf.nn.sparse_softmax_cross_entropy_with_logits(
                 labels=labels, logits=logits), sample_wts)
         return tf.reduce_mean(xentropy, name='xentropy_mean')
@@ -29,8 +29,8 @@ class BaseGAttN:
         return log_resh, lab_resh
 
     def confmat(logits, labels):
-        preds = tf.argmax(logits, axis=1)
-        return tf.confusion_matrix(labels, preds)
+        preds = tf.argmax(logits, axis=1)  ##每一行中的最大值
+        return tf.confusion_matrix(labels, preds)  ## 得到混淆矩阵
 
 ##########################
 # Adapted from tkipf/gcn #
